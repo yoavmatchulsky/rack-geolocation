@@ -31,7 +31,7 @@ module Rack
       end
 
       def geolocation
-        @geolocation ||= Rack::Geolocation::lookup(user_real_ip)
+        @geolocation ||= ::Rack::Geolocation::lookup(user_real_ip)
       end
 
       def user_real_ip
@@ -42,18 +42,24 @@ module Rack
         else
           self.ip
         end
+      rescue NameError
+        nil
       end
 
       def http_x_real_ip
         env['HTTP_X_REAL_IP']
+      rescue
+        nil
       end
 
       def http_x_forwarded_for
         env['HTTP_X_FORWARDED_FOR'] && env['HTTP_X_FORWARDED_FOR'].split(",").first.strip
+      rescue
+        nil
       end
 
       def empty_named_location
-        MaxMindDB::Result::NamedLocation.new({})
+        ::MaxMindDB::Result::NamedLocation.new({})
       end
     end
   end

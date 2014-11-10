@@ -3,7 +3,7 @@ module Rack
     class Loader
       def initialize(app, geolocation_db_file = nil)
         if geolocation_db_file and ::File.exists? geolocation_db_file.to_s
-          $geolocation_db_file = geolocation_db_file
+          Rack::Geolocation::geolocation_db_file = geolocation_db_file
           Rack::Request.send :include, Rack::Geolocation::Request
         end
 
